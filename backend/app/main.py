@@ -2,11 +2,13 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from db.models import User
 from db.database import SessionLocal
-from handlers.login.login import router
+from handlers import routers
 
 app = FastAPI()
-app.include_router(router)
 
-@router.get('/users/')
+for router in routers:
+    app.include_router(router)
+
+@app.get('/users/')
 def get_user(db: Session = Depends(SessionLocal)):
     return db.query(User).all()

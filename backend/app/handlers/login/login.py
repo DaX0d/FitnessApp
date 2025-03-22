@@ -4,9 +4,9 @@ from db.models import User
 from db.database import SessionLocal
 from schemas.users import UserCreate
 
-router = APIRouter()
+login_router = APIRouter()
 
-@router.post('/users/')
+@login_router.post('/users/')
 def register_user(user: UserCreate, db: Session = Depends(SessionLocal())):
     db.add(user)
     db.commit()

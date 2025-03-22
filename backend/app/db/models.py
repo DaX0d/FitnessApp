@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Float
-from .database import Base
+from .database import Base, engine
 
 class User(Base):
     __tablename__ = 'users'
@@ -8,3 +8,5 @@ class User(Base):
     name = Column(String, nullable=False)
     age = Column(Integer)
     weight = Column(Float)
+
+Base.metadata.create_all(bind=engine)
