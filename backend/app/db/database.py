@@ -1,8 +1,11 @@
+import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = 'postgresql://postgres:your_password@localhost:5432/fitness_db'
+# DATABASE_URL = os.getenv('DATABASE_URL')
+DATABASE_URL = 'postgresql://postgres:@db:5432/example'
 
 engine = create_engine(DATABASE_URL)
 
