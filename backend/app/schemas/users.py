@@ -1,6 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, Field
 
 class UserCreate(BaseModel):
-    name: str
-    age: int
+    name: Field = Field(max_length=20)
+    email: EmailStr
+    age: Field = Field(gt=0)
     weight: float

@@ -13,6 +13,6 @@ for router in routers:
 def get_user(db: Session = Depends(get_db)):
     return db.query(User).all()
 
-@app.get('/')
+@app.get('/', summary='Главная страница', tags=['Основные ручки'])
 def get_home():
-    return {'Hello': 'world'}
+    return 'Hello world'
