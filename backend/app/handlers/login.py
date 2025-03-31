@@ -23,13 +23,13 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return new_user
+    return {'message': 'success', 'user': new_user}
 
 @login_router.post('/login/')
 def login_user(name: str, password: str, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.name == name).first()
     if not user:
-        return 'fail'
+        return {'message': 'fail'}
     if bcrypt.checkpw(password.encode('utf-8'), user.password_hash.encode('utf-8')):
-        return 'success'
-    return 'fail'
+        return {'message': 'success'}
+    return {'message': 'fail'}
