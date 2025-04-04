@@ -2,7 +2,6 @@ package com.example.fitnesapp
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -10,10 +9,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import retrofit2.Call
-import retrofit2.Response
-import retrofit2.Callback
-
 
 class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -36,19 +31,9 @@ class MainActivity : AppCompatActivity() {
             else {
                 val user = User(name, email, password)
 
-                RetrofitClient.instance.registerUser(user).enqueue(object : Callback<RegisterResponse> {
-                    override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
-                        if (response.isSuccessful) {
-                            Log.d("API_RESPONSE", response.body()?.message?: "No message")
-                        } else {
-                            Log.e("API_ERROR", "Error: ${response.errorBody()?.string()}")
-                        }
-                    }
-
-                    override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                        Log.e("API_ERROR", "Network error: ${t.message}")
-                    }
-                })
+                val db = DbHelper(this, null)
+                db.addUser(user)
+                Toast.makeText(this, "Пользователь $name добавлен", Toast.LENGTH_LONG).show()
 
                 userName.text.clear()
                 userEmail.text.clear()
