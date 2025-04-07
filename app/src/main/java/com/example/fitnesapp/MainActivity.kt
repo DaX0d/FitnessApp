@@ -1,14 +1,21 @@
 package com.example.fitnesapp
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.Callback
+
 
 class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -26,14 +33,25 @@ class MainActivity : AppCompatActivity() {
             val email = userEmail.text.toString().trim()
             val password = userPassword.text.toString().trim()
 
-            if(name == "" || email == "" || password == "")
+            if(name == "" || email == "" || password == "") {
                 Toast.makeText(this, "Не все поля заполнены", Toast.LENGTH_LONG).show()
-            else {
+            } else {
                 val user = User(name, email, password)
 
-                val db = DbHelper(this, null)
-                db.addUser(user)
-                Toast.makeText(this, "Пользователь $name добавлен", Toast.LENGTH_LONG).show()
+                RetrofitNetwork.instance.registerUser(user).enqueue(object :
+                    Callback<RegisterResponse> {
+                    override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                        if (response.isSuccessful) {
+                            Log.d("API_RESPONSE", response.body()?.message?: "No message")
+                        } else {
+                            Log.e("API_ERROR", "Error: ${response.errorBody()?.string()}")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                        Log.e("API_ERROR", "Network error: ${t.message}")
+                    }
+                })
 
                 userName.text.clear()
                 userEmail.text.clear()
