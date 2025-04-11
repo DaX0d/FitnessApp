@@ -27,6 +27,12 @@ class MainActivity : AppCompatActivity() {
         val userEmail: EditText = findViewById(R.id.user_email)
         val userPassword: EditText = findViewById(R.id.user_password)
         val button: Button = findViewById(R.id.button_reg)
+        val TransitionToAuth: TextView = findViewById(R.id.transition_to_auth)
+
+        TransitionToAuth.setOnClickListener{
+            val intent = Intent(this, AuthActivity::class.java)
+            startActivity(intent)
+        }
 
         button.setOnClickListener {
             val name = userName.text.toString().trim()
