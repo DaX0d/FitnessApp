@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#201E28"
-    tools:context=".MainActivity">
+    tools:context=".AuthActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -19,58 +19,46 @@
         android:layout_marginTop="150dp"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:text="Создайте аккаунт" />
+        android:text="Войдите в аккаунт" />
 
     <EditText
-        android:id="@+id/name_user"
-        android:layout_width="240dp"
-        android:layout_height="50dp"
-        android:ems="10"
-        android:inputType="text"
-        android:textColorHint="#6a6a6a"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:textColor="#fdfdfd"
-        android:hint="Введите имя" />
-
-    <EditText
-        android:id="@+id/user_email"
+        android:id="@+id/user_email_auth"
         android:layout_width="240dp"
         android:layout_height="50dp"
         android:ems="10"
         android:inputType="textEmailAddress"
         android:textColorHint="#6a6a6a"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_gravity="center"
         android:textColor="#fdfdfd"
         android:hint="Введите почту" />
 
     <EditText
-        android:id="@+id/user_password"
+        android:id="@+id/user_password_auth"
         android:layout_width="240dp"
         android:layout_height="50dp"
         android:ems="10"
         android:inputType="textPassword"
         android:textColorHint="#6a6a6a"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_gravity="center"
         android:textColor="#fdfdfd"
         android:hint="Введите пароль" />
 
     <Button
-        android:id="@+id/button_reg"
+        android:id="@+id/button_auth"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:text="Регистрация"
+        android:text="Вход"
         android:textStyle="bold"
         android:textSize="16sp"
         android:textColor="#5e4602"
         android:layout_gravity="center"
-        android:backgroundTint="#e2a600"
-        android:layout_marginTop="20dp"/>
+        android:backgroundTint="#e8c5"
+        android:layout_marginTop="40dp"/>
 
     <TextView
-        android:id="@+id/transition_to_auth"
+        android:id="@+id/transition_to_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/inter_bold"
@@ -79,6 +67,6 @@
         android:layout_marginTop="150dp"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:text="Войти" />
+        android:text="Зарегестрироваться" />
 
 </LinearLayout>
