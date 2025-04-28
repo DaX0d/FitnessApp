@@ -12,7 +12,7 @@ def hashed_password(password: str):
 
 login_router = APIRouter()
 
-@login_router.post('/sugn_up/')
+@login_router.post('/sign_up/')
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
     new_user = User()
     new_user.name = user.name
