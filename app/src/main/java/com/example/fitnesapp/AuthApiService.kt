@@ -1,5 +1,7 @@
 package com.example.fitnesapp
 
+import android.content.Context
+import com.google.gson.annotations.SerializedName
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -9,20 +11,22 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 
-
-
 interface AuthApiService {
-    @POST("")
+    @POST("auth/login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
+    @GET("users/me")
+    suspend fun getProfile(): Response<ProfileResponse>
+
     companion object {
-        fun create(baseUrl: String): AuthApiService {
-            val interceptor = HttpLoggingInterceptor().apply {
+        fun create(baseUrl: String, context: Context): AuthApiService {
+            val loggingInterceptor = HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             }
 
             val client = OkHttpClient.Builder()
-                .addInterceptor(interceptor)
+                .addInterceptor(loggingInterceptor)
+                .addInterceptor(AuthInterceptor(context))
                 .build()
 
             return Retrofit.Builder()
@@ -34,3 +38,7 @@ interface AuthApiService {
         }
     }
 }
+
+data class ProfileResponse(
+    val username: String
+)

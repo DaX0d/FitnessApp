@@ -1,5 +1,7 @@
 package com.example.fitnesapp
 
+import com.google.gson.annotations.SerializedName
+
 // LoginRequest.kt
 data class LoginRequest(
     val email: String,
@@ -8,13 +10,11 @@ data class LoginRequest(
 
 // LoginResponse.kt
 data class LoginResponse(
-    val token: String,
-    val userId: String,
-    val expiresIn: Long
+    @SerializedName("access_token") val accessToken: String,
+    @SerializedName("token_type") val tokenType: String
 )
-
 // ApiError.kt
-data class ApiError(
+    data class ApiError(
     val message: String,
     val code: Int
 )

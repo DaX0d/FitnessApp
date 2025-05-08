@@ -1,6 +1,5 @@
 package com.example.fitnesapp
 
-import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,12 +7,14 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val authRepository: AuthRepository,
-    private val sharedPreferences: SharedPreferences
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _loginResult = MutableLiveData<Result<LoginResponse>>()
     val loginResult: LiveData<Result<LoginResponse>> = _loginResult
+
+    private val _profileResult = MutableLiveData<Result<ProfileResponse>>()
+    val profileResult: LiveData<Result<ProfileResponse>> = _profileResult
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -21,9 +22,9 @@ class LoginViewModel(
         }
     }
 
-    fun saveAuthToken(token: String) {
-        sharedPreferences.edit()
-            .putString("auth_token", token)
-            .apply()
+    fun getProfile() {
+        viewModelScope.launch {
+            _profileResult.value = authRepository.getProfile()
+        }
     }
 }
