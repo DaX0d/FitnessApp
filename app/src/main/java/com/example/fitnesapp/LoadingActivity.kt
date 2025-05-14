@@ -1,20 +1,38 @@
 package com.example.fitnesapp
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class LoadingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_loading)
 
+        lifecycleScope.launch {
+            // Имитация загрузки (можно удалить в продакшене)
+            delay(1000)
+
+            checkAuthState()
+        }
+    }
+
+
+    private fun checkAuthState() {
+        val token = SecureTokenStorage.TokenStorage.getToken(this)
+
+        val destination = if (!token.isNullOrEmpty()) {
+            MenuActivity::class.java
+        } else {
+            AuthActivity::class.java
+        }
+
+        startActivity(Intent(this, destination).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        })
+        finish()
     }
 }
