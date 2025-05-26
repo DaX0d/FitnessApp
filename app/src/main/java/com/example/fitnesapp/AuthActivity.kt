@@ -77,7 +77,7 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun navigateToMain() {
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, LogonActivity::class.java))
     }
 
     private fun navigateToMenu() {
