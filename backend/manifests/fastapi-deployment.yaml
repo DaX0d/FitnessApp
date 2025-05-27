@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: fastapi
-        image: fastapi-server:latest
+        image: dax0d/fitness-app-backend:latest
         ports:
         - containerPort: 8000
         env:
