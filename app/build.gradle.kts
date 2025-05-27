@@ -33,6 +33,9 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -54,10 +57,11 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.security.crypto.ktx.v110alpha06)
 
 
     implementation(libs.jwtdecode)
     implementation(libs.androidx.security.crypto)
 
-
+    implementation(libs.coil)
 }
