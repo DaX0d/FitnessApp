@@ -18,7 +18,7 @@ class LogonActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_logon)
 
         val userName: EditText = findViewById(R.id.name_user)
         val userEmail: EditText = findViewById(R.id.user_email)

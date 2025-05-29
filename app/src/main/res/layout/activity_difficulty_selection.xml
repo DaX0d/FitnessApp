@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#e2a600"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_bold"
+        android:textColor="#fdfdfd"
+        android:layout_gravity="center"
+        android:layout_marginTop="-150dp"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        android:text="FLYN" />
+
+    <Button
+        android:id="@+id/beginnerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Beginner"
+        android:backgroundTint="#000"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="50dp"/>
+
+    <Button
+        android:id="@+id/intermediateButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Intermediate"
+        android:backgroundTint="#000"
+        android:layout_marginBottom="50dp"/>
+
+    <Button
+        android:id="@+id/advancedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#000"
+        android:layout_marginBottom="50dp"
+        android:text="Advanced"/>
+
+    <Button
+        android:id="@+id/menuButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#000"
+        android:text="Menu"/>
+
+</LinearLayout>
