@@ -45,14 +45,14 @@ fun WorkoutCard(workout: Workout, onClick: () -> Unit) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = workout.title,
-                style = MaterialTheme.typography.h6
+                style = MaterialTheme.typography.headlineLarge
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = workout.description,
-                style = MaterialTheme.typography.body2
+                style = MaterialTheme.typography.titleSmall
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -64,7 +64,7 @@ fun WorkoutCard(workout: Workout, onClick: () -> Unit) {
             ) {
                 Text(
                     text = "Длительность: ${workout.duration} мин",
-                    style = MaterialTheme.typography.body2
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
                 Chip(
