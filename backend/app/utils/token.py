@@ -3,10 +3,15 @@ from dotenv import load_dotenv
 
 import datetime as dt
 from jose import jwt, JWTError
-load_dotenv()
+
+
+load_dotenv(dotenv_path='../../.env')
 SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'KMSAFLJKNSFDKL'
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
+
 
 def create_access_token(data: dict, expires_delta: dt.timedelta = None):
     to_encode = data.copy()

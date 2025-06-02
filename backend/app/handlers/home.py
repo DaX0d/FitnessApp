@@ -11,37 +11,43 @@ from app.db.database import get_db
 load_dotenv()
 # Параметры для JWT
 SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'KMSAFLJKNSFDKL'
 ALGORITHM = "HS256"
 
 # Инициализация схемы авторизации (OAuth2)
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 
 home_router = APIRouter()
 
 
+@home_router.get('/me/')
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-    )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
+        username: str = payload.get("name")
         if username is None:
-            raise credentials_exception
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token payload",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
     except JWTError:
-        raise credentials_exception
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
     user = db.query(User).filter(User.name == username).first()
     if user is None:
-        raise credentials_exception
-    return user
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
 
-
-@home_router.get('/me/')
-def get_me(current_user: User = Depends(get_current_user)):
     return {
-        "id": current_user.id,
-        "name": current_user.name,
-        "email": current_user.email,
+        "name": user.name,
+        "email": user.email,
+        # "age": user.age,
+        # "weight": user.weight
     }
