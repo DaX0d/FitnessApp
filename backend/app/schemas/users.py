@@ -1,4 +1,5 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, AnyUrl
+
 
 class UserCreate(BaseModel):
     name: str = Field(max_length=20)
@@ -7,6 +8,13 @@ class UserCreate(BaseModel):
     # weight: float
     password: str
 
+
 class UserLogin(BaseModel):
     name: str
     password: str
+
+
+class UserProfile(BaseModel):
+    name: str
+    email: EmailStr
+    avatar_url: AnyUrl
