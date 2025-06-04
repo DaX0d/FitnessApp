@@ -1,8 +1,10 @@
-import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
+
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
+
 }
 
 android {
@@ -37,9 +39,14 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 
+}
 
+composeCompiler {
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
+    stabilityConfigurationFile = rootProject.layout.projectDirectory.file("stability_config.conf")
 }
 
 dependencies {
@@ -55,6 +62,8 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.material3.android)
     implementation(libs.ads.mobile.sdk)
+    implementation(libs.androidx.navigation.compose.android)
+    implementation(libs.androidx.ui.tooling.preview.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -64,7 +73,7 @@ dependencies {
 
     implementation(libs.logging.interceptor)
 
-    implementation(libs.androidx.navigation.compose)
+
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.security.crypto.ktx.v110alpha06)
@@ -82,10 +91,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit.v115)
-    androidTestImplementation(libs.androidx.espresso.core.v351)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.junit.v115)
+    implementation(libs.androidx.espresso.core.v351)
+
 }

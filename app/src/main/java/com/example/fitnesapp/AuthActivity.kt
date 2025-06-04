@@ -45,7 +45,7 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        val apiService = AuthApiService.create("https://your-api-url.com/", this)
+        val apiService = AuthApiService.create("http://127.0.0.1:8000/", this)
         val authRepository = AuthRepository(apiService, this)
         viewModel = ViewModelProvider(
             this,
