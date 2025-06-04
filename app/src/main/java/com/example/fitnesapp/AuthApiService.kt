@@ -1,7 +1,6 @@
 package com.example.fitnesapp
 
 import android.content.Context
-import com.google.gson.annotations.SerializedName
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -12,10 +11,10 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface AuthApiService {
-    @POST("auth/login")
+    @POST("login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
-    @GET("users/me")
+    @GET("me")
     suspend fun getProfile(): Response<ProfileResponse>
 
     companion object {
