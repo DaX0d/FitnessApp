@@ -48,5 +48,13 @@
             android:backgroundTint="#e8c5"
             android:text="Выйти"/>
 
+        <Button
+            android:id="@+id/btnMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="#e8c5"
+            android:text="В меню"/>
+
     </LinearLayout>
 </ScrollView>
