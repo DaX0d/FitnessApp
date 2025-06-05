@@ -3,7 +3,7 @@ package com.example.fitnesapp
 import retrofit2.Response
 
 class ProfileRepository(private val apiService: ProfileApiService) {
-    suspend fun getUserProfile(): Response<UserProfile> {
-        return apiService.getProfile()
+    suspend fun getUserProfile(token: String): Response<UserProfile> {
+        return apiService.getProfile(token)
     }
 }

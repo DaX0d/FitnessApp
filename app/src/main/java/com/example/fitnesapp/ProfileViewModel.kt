@@ -24,11 +24,16 @@ class ProfileViewModel(
         viewModelScope.launch {
             try {
                 _isLoading.value = true
-                val response = profileRepository.getUserProfile()
-                if (response.isSuccessful) {
-                    _userData.value = response.body()
+                val token = SecureTokenStorage.TokenStorage.getToken(context)
+                if (token != null) {
+                    val response = profileRepository.getUserProfile(token)
+                    if (response.isSuccessful) {
+                        _userData.value = response.body()
+                    } else {
+                        _errorMessage.value = "Ошибка загрузки данных"
+                    }
                 } else {
-                    _errorMessage.value = "Ошибка загрузки данных"
+                    _errorMessage.value = "Токен не найден"
                 }
             } catch (e: Exception) {
                 _errorMessage.value = "Нет соединения с сервером"
