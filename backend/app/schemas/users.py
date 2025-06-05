@@ -10,7 +10,7 @@ class UserCreate(BaseModel):
 
 
 class UserLogin(BaseModel):
-    name: str
+    email: str
     password: str
 
 

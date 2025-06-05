@@ -33,24 +33,30 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
 
-    return {'message': 'success',
-            # 'user': new_user
+    access_token = create_access_token(data={"email": user.email})
+
+    return {
+            'message': 'success',
+            "access_token": access_token
            }
 
 
 @login_router.post('/login/')
 def login_user(user_get: UserLogin, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.name == user_get.name).first()
+    user = db.query(User).filter(User.email == user_get.email).first()
     if not user:
-        return {'message': 'fail',
+        return {'msg': 'fail',
                 'details': 'No such person'
                 }
     
     if bcrypt.checkpw(user_get.password.encode('utf-8'), user.password_hash.encode('utf-8')):
-        token = create_access_token(data={'name': user.name})
-        return token
+        access_token = create_access_token(data={'email': user.email})
+        return {
+            'msg': 'success',
+            "access_token": access_token
+        }
     
-    return {'message': 'fail',
+    return {'msg': 'fail',
             'details': 'Invalid password'
             }
 
@@ -61,5 +67,5 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
     if not user or not bcrypt.checkpw(form_data.password.encode('utf-8'), user.password_hash.encode('utf-8')):
         raise HTTPException(status_code=400, detail="Incorrect username or password")
 
-    access_token = create_access_token(data={"name": user.name})
+    access_token = create_access_token(data={"email": user.email})
     return {"access_token": access_token, "token_type": "bearer"}
