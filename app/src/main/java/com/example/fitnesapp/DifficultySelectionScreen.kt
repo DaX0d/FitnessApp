@@ -34,6 +34,7 @@ fun DifficultySelectionScreen(
 ) {
     val workouts by viewModel.workouts.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val error by viewModel.error.collectAsState()
 
     Column(
         modifier = Modifier

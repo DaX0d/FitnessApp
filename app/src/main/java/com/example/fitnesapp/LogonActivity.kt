@@ -31,6 +31,11 @@ class LogonActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        fun navigateToMenu() {
+            startActivity(Intent(this, MenuActivity::class.java))
+            finish()
+        }
+
         button.setOnClickListener {
             val name = userName.text.toString().trim()
             val email = userEmail.text.toString().trim()
@@ -46,6 +51,7 @@ class LogonActivity : AppCompatActivity() {
                     override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                         if (response.isSuccessful) {
                             Log.d("API_RESPONSE", response.body()?.message?: "No message")
+                            navigateToMenu()
                         } else {
                             Log.e("API_ERROR", "Error: ${response.errorBody()?.string()}")
                         }
@@ -61,5 +67,6 @@ class LogonActivity : AppCompatActivity() {
                 userPassword.text.clear()
             }
         }
+
     }
 }

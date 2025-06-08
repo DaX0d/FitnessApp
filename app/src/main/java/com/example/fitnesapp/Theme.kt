@@ -9,7 +9,7 @@ fun FitnessAppTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colorScheme = lightColorScheme(), // или darkColorScheme()
+        colorScheme = lightColorScheme(),
         typography = Typography,
         content = content
     )

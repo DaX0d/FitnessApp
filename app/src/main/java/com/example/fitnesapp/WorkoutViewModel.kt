@@ -7,6 +7,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class WorkoutViewModel(private val repository: WorkoutRepository) : ViewModel() {
+    init {
+        loadAllWorkouts()
+    }
+
+    private val _error = MutableStateFlow<String?>(null)
+    val error: StateFlow<String?> = _error
+
     private val _workouts = MutableStateFlow<List<Workout>>(emptyList())
     val workouts: StateFlow<List<Workout>> = _workouts
 
@@ -24,18 +31,32 @@ class WorkoutViewModel(private val repository: WorkoutRepository) : ViewModel() 
     private fun loadWorkoutsByDifficulty(difficulty: DifficultyLevel) {
         viewModelScope.launch {
             _isLoading.value = true
-            val result = repository.getWorkoutsByDifficulty(difficulty)
-            _workouts.value = result
-            _isLoading.value = false
+            _error.value = null
+            try {
+                val result = repository.getWorkoutsByDifficulty(difficulty)
+                _workouts.value = result
+            } catch (e: Exception) {
+                _error.value = e.message ?: "Неизвестная ошибка"
+                _workouts.value = emptyList()
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
     fun loadAllWorkouts() {
         viewModelScope.launch {
             _isLoading.value = true
-            val result = repository.getAllWorkouts()
-            _workouts.value = result
-            _isLoading.value = false
+            _error.value = null
+            try {
+                val result = repository.getAllWorkouts()
+                _workouts.value = result
+            } catch (e: Exception) {
+                _error.value = e.message ?: "Неизвестная ошибка"
+                _workouts.value = emptyList()
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 }
