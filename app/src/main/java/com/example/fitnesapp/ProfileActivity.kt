@@ -17,7 +17,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
     private val viewModel: ProfileViewModel by viewModels {
         val apiService = Retrofit.Builder()
-            .baseUrl("http://10.10.79.241:8000/")
+            .baseUrl("http://172.28.64.1:8000/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ProfileApiService::class.java)
