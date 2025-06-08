@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 // LoginRequest.kt
 data class LoginRequest(
-    val email: String,
+    val username: String,
     val password: String
 )
 

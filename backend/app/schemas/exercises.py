@@ -29,7 +29,7 @@ class ExerciseOut(BaseModel):
     image_url: Optional[str]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class WorkoutOut(BaseModel):
@@ -41,4 +41,4 @@ class WorkoutOut(BaseModel):
     exercises: List[ExerciseOut]
 
     class Config:
-        orm_mode = True
+        from_attributes = True

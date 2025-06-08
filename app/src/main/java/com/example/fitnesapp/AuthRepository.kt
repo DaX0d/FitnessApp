@@ -10,7 +10,7 @@ class AuthRepository(
 ) {
     suspend fun login(email: String, password: String): Result<LoginResponse> {
         return try {
-            val response = apiService.login(LoginRequest(email, password))
+            val response = apiService.login(email, password)
             if (response.isSuccessful) {
                 response.body()?.let { loginResponse ->
                     // Сохраняем токен при успешном логине

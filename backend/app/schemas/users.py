@@ -4,8 +4,6 @@ from pydantic import BaseModel, EmailStr, Field, AnyUrl
 class UserCreate(BaseModel):
     name: str = Field(max_length=20)
     email: EmailStr
-    # age: int = Field(gt=0)
-    # weight: float
     password: str
 
 

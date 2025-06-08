@@ -1,71 +1,65 @@
 import bcrypt
+from typing import Annotated
+from datetime import timedelta
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.db.models import User
 from app.db.database import get_db
-from app.schemas.users import UserCreate, UserLogin
-from app.utils.token import create_access_token
-from fastapi.security import OAuth2PasswordRequestForm
+from app.schemas.users import UserCreate, UserLogin, UserProfile
+from app.utils.auth import create_access_token, decode_token, hashed_password, verify_password
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+from app.schemas.token import Token
 
 
-def hashed_password(password: str):
-    password_b = password.encode('utf-8')
-    salt = bcrypt.gensalt()
-    return bcrypt.hashpw(password=password_b, salt=salt)
+ACCESS_TOKEN_EXPIRE_MINUTES = 15
 
 
-login_router = APIRouter()
+login_router = APIRouter(prefix="/auth", tags=["Auth"])
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 
-@login_router.post('/sign_up/')
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    try:
+        payload = decode_token(token)
+        email: str = payload.get("sub")
+        user = db.query(User).filter(User.email == email).first()
+        if not user:
+            raise HTTPException(status_code=401, detail="User not found")
+        return user
+    except:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+
+@login_router.post('/sign_up')
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
-    new_user = User()
-    new_user.name = user.name
-    new_user.email = user.email
-    # new_user.age = user.age
-    # new_user.weight = user.weight
-    
-    new_user.password_hash = hashed_password(user.password).decode('utf-8')
-
-    db.add(new_user)
+    if db.query(User).filter(User.email == user.email).first():
+        raise HTTPException(status_code=400, detail="Email already registered")
+    user = User(
+        name=user.name,
+        email=user.email,
+        password_hash=hashed_password(user.password).decode('utf-8')
+    )
+    db.add(user)
     db.commit()
-    db.refresh(new_user)
-
-    access_token = create_access_token(data={"email": user.email})
-
-    return {
-            'message': 'success',
-            "access_token": access_token
-           }
+    db.refresh(user)
+    return {"msg": "Registration successful"}
 
 
-@login_router.post('/login/')
-def login_user(user_get: UserLogin, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == user_get.email).first()
-    if not user:
-        return {'msg': 'fail',
-                'details': 'No such person'
-                }
-    
-    if bcrypt.checkpw(user_get.password.encode('utf-8'), user.password_hash.encode('utf-8')):
-        access_token = create_access_token(data={'email': user.email})
-        return {
-            'msg': 'success',
-            "access_token": access_token
-        }
-    
-    return {'msg': 'fail',
-            'details': 'Invalid password'
-            }
+@login_router.post('/login')
+def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == form_data.username).first()
+    if not user or not verify_password(form_data.password, user.password_hash):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+    token = create_access_token(data={"sub": user.email})
+    return {"access_token": token, "token_type": "bearer"}
 
 
-@login_router.post('/token')
-def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.name == form_data.username).first()
-    if not user or not bcrypt.checkpw(form_data.password.encode('utf-8'), user.password_hash.encode('utf-8')):
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
-
-    access_token = create_access_token(data={"email": user.email})
-    return {"access_token": access_token, "token_type": "bearer"}
+@login_router.get("/me", response_model=UserProfile)
+def get_profile(current_user: User = Depends(get_current_user)):
+    return UserProfile(
+        name= current_user.name,
+        email= current_user.email,
+        avatar_url= 'https://static.wikia.nocookie.net/joke-battles/images/2/26/Lion_%28The_Backrooms%29.jpg/revision/latest?cb=20250211015920'
+    )

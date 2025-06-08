@@ -6,15 +6,18 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface AuthApiService {
-    @POST("login")
-    suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
+    @FormUrlEncoded
+    @POST("auth/login")
+    suspend fun login(@Field("username") email: String,
+                      @Field("password") password: String): Response<LoginResponse>
 
-    @GET("me")
+    @GET("auth/me")
     suspend fun getProfile(): Response<ProfileResponse>
 
     companion object {
