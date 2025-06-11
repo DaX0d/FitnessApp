@@ -8,8 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,6 +31,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+
 
 @Composable
 fun DifficultySelectionScreen(
@@ -49,6 +54,7 @@ fun DifficultySelectionScreen(
             text = "Выберите уровень сложности",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 32.dp)
+
         )
 
         DifficultyButton(
@@ -94,7 +100,7 @@ fun DifficultyButton(level: DifficultyLevel, onClick: () -> Unit) {
         colors = ButtonDefaults.buttonColors(
             containerColor = when (level) {
                 DifficultyLevel.BEGINNER -> Color.Green
-                DifficultyLevel.INTERMEDIATE -> Color.Blue
+                DifficultyLevel.INTERMEDIATE -> Color.Yellow
                 DifficultyLevel.ADVANCED -> Color.Red
             }
         )
@@ -148,19 +154,54 @@ fun ErrorScreen(
 }
 
 @Composable
-fun WorkoutExecutionScreen(
+fun WorkoutExercisesScreen(
     workout: Workout,
     onFinish: () -> Unit
 ) {
-    // Implement your workout execution screen UI here
     Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
-        Text(text = "Executing: ${workout.title}")
-        Button(onClick = onFinish) {
-            Text("Finish Workout")
+        Text(
+            text = workout.title,
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        LazyColumn {
+            items(workout.exercises) { exercise ->
+                ExerciseCard(exercise = exercise)
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+        }
+
+        Button(
+            onClick = onFinish,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp))
+        {
+        Text("Finish Workout")
+    }
+    }
+}
+
+@Composable
+fun ExerciseCard(exercise: Exercise) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp))
+    {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = exercise.name,
+                style = MaterialTheme.typography.titleLarge
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = exercise.description)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Duration: ${exercise.duration} sec")
         }
     }
 }
@@ -217,7 +258,7 @@ fun FitnessApp(
             val workout = workouts.find { it.id == workoutId }
 
             if (workout != null) {
-                WorkoutExecutionScreen(
+                WorkoutExercisesScreen(
                     workout = workout,
                     onFinish = { navController.popBackStack("difficulty_selection", false) }
                 )
@@ -233,3 +274,4 @@ fun AppPreview() {
         FitnessApp(viewModel = viewModel())
     }
 }
+
