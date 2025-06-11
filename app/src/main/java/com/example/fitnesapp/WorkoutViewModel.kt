@@ -7,10 +7,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class WorkoutViewModel(private val repository: WorkoutRepository) : ViewModel() {
-    init {
-        loadAllWorkouts()
-    }
-
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
@@ -22,6 +18,10 @@ class WorkoutViewModel(private val repository: WorkoutRepository) : ViewModel() 
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
+
+    init {
+        loadAllWorkouts()
+    }
 
     fun selectDifficulty(difficulty: DifficultyLevel) {
         _selectedDifficulty.value = difficulty

@@ -1,5 +1,6 @@
 package com.example.fitnesapp
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -39,6 +40,7 @@ fun DifficultySelectionScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.White)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -92,7 +94,7 @@ fun DifficultyButton(level: DifficultyLevel, onClick: () -> Unit) {
         colors = ButtonDefaults.buttonColors(
             containerColor = when (level) {
                 DifficultyLevel.BEGINNER -> Color.Green
-                DifficultyLevel.INTERMEDIATE -> Color.Yellow
+                DifficultyLevel.INTERMEDIATE -> Color.Blue
                 DifficultyLevel.ADVANCED -> Color.Red
             }
         )
@@ -165,10 +167,9 @@ fun WorkoutExecutionScreen(
 
 @Composable
 fun FitnessApp(
-    viewModel: WorkoutViewModel = viewModel()
+    viewModel: WorkoutViewModel
 ) {
     val navController = rememberNavController()
-
     NavHost(
         navController = navController,
         startDestination = "difficulty_selection"
@@ -229,6 +230,6 @@ fun FitnessApp(
 @Composable
 fun AppPreview() {
     FitnessAppTheme {
-        FitnessApp()
+        FitnessApp(viewModel = viewModel())
     }
 }
